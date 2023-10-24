@@ -19,7 +19,7 @@ depends_on: Union[str, Sequence[str], None] = None
 
 def upgrade() -> None:
     op.create_table('race',
-                    sa.Column('id', sa.Integer(), nullable=False),
+                    sa.Column('id', sa.BigInteger(), nullable=False),
                     sa.Column('created_at', sa.DateTime(), server_default=sa.text("(now() at time zone 'utc')"),
                               nullable=True),
                     sa.Column('updated_at', sa.DateTime(), server_default=sa.text("(now() at time zone 'utc')"),

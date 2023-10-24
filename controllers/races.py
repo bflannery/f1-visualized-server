@@ -40,3 +40,9 @@ def get_races_by_name(race_name: str, db: Session = Depends(get_db)):
 def get_all_races(db: Session = Depends(get_db)):
     all_db_races = race_service.get_all_races(db)
     return all_db_races
+
+
+@races_router.post("", summary="Create new race", response_model=RaceSchema)
+def create_user(race: RaceSchema, db: Session = Depends(get_db)):
+    return race_service.create_race(db=db, race=race)
+

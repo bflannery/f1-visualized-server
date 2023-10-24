@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from db import get_db
-from schemas import CircuitSchema
+from schemas import CircuitSchema, CircuitRaceSchema, CircuitRacesSchema
 from services import circuit as circuit_service
 
 circuits_router = APIRouter()
@@ -14,6 +14,18 @@ circuits_router = APIRouter()
     response_model=CircuitSchema
 )
 def get_circuit_by_id(circuit_id: int, db: Session = Depends(get_db)):
+    db_circuit = circuit_service.get_circuit_by_id(db, id=circuit_id)
+    if db_circuit is None:
+        raise HTTPException(status_code=404, detail=f"Driver #{circuit_id} not found")
+    return db_circuit
+
+
+@circuits_router.get(
+    "/circuit/{circuit_id}/races/",
+    summary="Get all circuit races by circuit id",
+    response_model=CircuitRacesSchema
+)
+def get_all_circuit_races(circuit_id: int, db: Session = Depends(get_db)):
     db_circuit = circuit_service.get_circuit_by_id(db, id=circuit_id)
     if db_circuit is None:
         raise HTTPException(status_code=404, detail=f"Driver #{circuit_id} not found")
@@ -55,4 +67,7 @@ def get_circuits_by_country(circuit_country: str, db: Session = Depends(get_db))
 )
 def get_all_circuits(db: Session = Depends(get_db)):
     all_db_circuits = circuit_service.get_all_circuits(db)
+    import pydevd_pycharm
+    pydevd_pycharm.settrace('brians-personal-mac.local', port=12345, stdoutToServer=True, stderrToServer=True)
+
     return all_db_circuits

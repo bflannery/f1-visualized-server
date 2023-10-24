@@ -40,5 +40,5 @@ def upgrade() -> None:
 
 def downgrade() -> None:
     op.drop_index(op.f('ix_circuit_reference'), table_name='circuit')
-    op.drop_index(op.f('ix_circuit_reference'), table_name='circuit')
+    op.drop_index(op.f('ix_circuit_name'), table_name='circuit')
     op.drop_table('circuit')
