@@ -34,9 +34,10 @@ def upgrade() -> None:
                     sa.Column('rank', sa.Integer(), nullable=True),
                     sa.Column('race_status_id', sa.Integer(), nullable=False),
                     sa.Column('time', sa.Text(), nullable=True),
-                    sa.Column('time_ms', sa.Text(), nullable=True),
+                    sa.Column('time_ms', sa.Integer(), nullable=True),
                     sa.Column('fastest_lap', sa.Integer(), nullable=True),
                     sa.Column('fastest_lap_time', sa.Text(), nullable=True),
+                    sa.Column('fastest_lap_time_ms', sa.Integer(), nullable=True),
                     sa.Column('fastest_lap_speed', sa.Text(), nullable=True),
 
                     sa.PrimaryKeyConstraint('id'),

@@ -1,9 +1,6 @@
 import datetime
-from numpy import nan
-
-import requests
-
 import pandas as pd
+from numpy import nan, isnan
 
 # reading the csv file
 # seasons = pd.read_csv("./data/original_data/formatted_season.csv", usecols=['id', 'year'])
@@ -85,35 +82,47 @@ import pandas as pd
 # # # writing into the file
 # new_races.to_csv("./data/db_data/formatted_races.csv", index=False)
 
-races = pd.read_csv("./data/db_data/formatted_races.csv")
 
-formatted_races = []
-for i, row in races.iterrows():
-    ## id,season_id,round,circuit_id,name,date,fp1_date,fp2_date,fp3_date,qualifying_date,sprint_date,wki_url,
-    race = {
-        "id": row[0],
-        "season_id": row[1],
-        "round": row[2],
-        "circuit_id": row[3],
-        "name": row[4],
-        "date": row[5],
-        "fp1_date": None,
-        "fp2_date": None,
-        "fp3_date": None,
-        "qualifying_date": None,
-        "sprint_date": None,
-        "wiki_url": row[11],
-    }
-    print(race)
-    try:
-        res = requests.post('http://localhost:8000/races', json=race)
-        print(res.json())
-    except:
-        print(f"Error importing race {race.id}")
-# print(races)
-#
-# for race in races:
-#     try:
-#         res = requests.post('http://localhost:8000/races', data=race)
-#     except:
-#         print(f"Error importing race {race.id}")
+races_results = pd.read_csv("./f1_data/formatted_data/formatted_qualifying_data.csv")
+
+
+def format_results(result):
+    q1_time = result['q1_time']
+    q2_time = result['q2_time']
+    q3_time = result['q3_time']
+    # if not isnan(race_time_ms):
+    #     race_time_ms_timedelta = datetime.timedelta(milliseconds=race_time_ms)
+    #     split_race_time = str(race_time_ms_timedelta).rsplit(':', 1)
+    #     split_race_time_mins_secs = split_race_time[0]
+    #     split_race_time_ms = split_race_time[1]
+    #     split_race_time_ms_rounded = str(round(float(split_race_time_ms))).zfill(2)
+    #     result['time'] = f"{split_race_time_mins_secs}:{split_race_time_ms_rounded}"
+
+    if q1_time and type(q1_time) == str:
+        time_obj = datetime.datetime.strptime(q1_time, '%M:%S.%f').time()
+        time_obj_min = time_obj.minute * 60000
+        time_obj_sec = time_obj.second * 1000
+        time_obj_ms = time_obj.microsecond / 1000
+        formatted_ms = time_obj_min + time_obj_sec + time_obj_ms
+        result['q1_time_ms'] = int(formatted_ms)
+
+    if q2_time and type(q2_time) == str:
+        time_obj = datetime.datetime.strptime(q2_time, '%M:%S.%f').time()
+        time_obj_min = time_obj.minute * 60000
+        time_obj_sec = time_obj.second * 1000
+        time_obj_ms = time_obj.microsecond / 1000
+        formatted_ms = time_obj_min + time_obj_sec + time_obj_ms
+        result['q2_time_ms'] = int(formatted_ms)
+
+    if q3_time and type(q3_time) == str:
+        time_obj = datetime.datetime.strptime(q3_time, '%M:%S.%f').time()
+        time_obj_min = time_obj.minute * 60000
+        time_obj_sec = time_obj.second * 1000
+        time_obj_ms = time_obj.microsecond / 1000
+        formatted_ms = time_obj_min + time_obj_sec + time_obj_ms
+        result['q3_time_ms'] = int(formatted_ms)
+    return result
+
+
+new_race_results = races_results.apply(format_results, axis=1)
+new_race_results.to_csv("./f1_data/formatted_data/formatted_qualifying_data.csv", index=False)

@@ -30,6 +30,7 @@ def upgrade() -> None:
                     sa.Column('stop', sa.Integer(), nullable=False),
                     sa.Column('time_of_day', sa.Text(), nullable=False),
                     sa.Column('duration', sa.Text(), nullable=False),
+                    sa.Column('duration_ms', sa.Text(), nullable=False),
                     sa.PrimaryKeyConstraint('id'),
                     sa.ForeignKeyConstraint(['race_id'], ['race.id'], ),
                     sa.ForeignKeyConstraint(['driver_id'], ['driver.id'], ),

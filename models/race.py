@@ -48,6 +48,7 @@ class PitStopModel(DBBaseModel):
     stop = Column(Integer, nullable=False, unique=False)
     time_of_day = Column(Text, nullable=False, unique=False)
     duration = Column(Text, nullable=False, unique=False)
+    duration_ms = Column(Integer, nullable=False, unique=False)
 
     race = relationship("RaceModel")
     driver = relationship("DriverModel")
@@ -59,9 +60,12 @@ class QualifyingModel(DBBaseModel):
     driver_id = Column(Integer, ForeignKey("driver_id.id"), nullable=False)
     constructor_id = Column(Integer, ForeignKey("constructor.id"), nullable=False)
     position = Column(Integer, nullable=False, unique=False)
-    q1 = Column(Text, nullable=True, unique=False)
-    q2 = Column(Text, nullable=True, unique=False)
-    q3 = Column(Text, nullable=True, unique=False)
+    q1_time = Column(Text, nullable=True, unique=False)
+    q1_time_ms = Column(Integer, nullable=True, unique=False)
+    q2_time = Column(Text, nullable=True, unique=False)
+    q2_time_ms = Column(Integer, nullable=True, unique=False)
+    q3_time = Column(Text, nullable=True, unique=False)
+    q3_time_ms = Column(Integer, nullable=True, unique=False)
 
     race = relationship("RaceModel")
     driver = relationship("DriverModel")
@@ -83,6 +87,7 @@ class RaceResultModel(DBBaseModel):
     time_ms = Column(Integer, nullable=True, unique=False)
     fastest_lap = Column(Integer, nullable=True, unique=False)
     fastest_lap_time = Column(Text, nullable=True, unique=False)
+    fastest_lap_time_ms = Column(Integer, nullable=True, unique=False)
     fastest_lap_speed = Column(Text, nullable=True, unique=False)
 
     race = relationship("RaceModel")
