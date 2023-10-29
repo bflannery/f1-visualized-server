@@ -15,6 +15,13 @@ class DriverModel(DBBaseModel):
     number = Column(Integer, nullable=True, unique=False)
     wiki_url = Column(Text, nullable=True, unique=False)
 
+    lap_times = relationship("LapTimeModel", back_populates="drivers", lazy=True)
+    pit_stops = relationship("PitStopModel", back_populates="drivers", lazy=True)
+    qualifyings = relationship("QualifyingModel", back_populates="drivers", lazy=True)
+    race_results = relationship("RaceResultModel", back_populates="drivers", lazy=True)
+    sprint_results = relationship("SprintResultModel", back_populates="drivers", lazy=True)
+    driver_standings = relationship("DriverStandingModel", back_populates="drivers", lazy=True)
+
 
 class DriverStandingModel(DBBaseModel):
     __tablename__ = "driver_standing"
@@ -24,5 +31,5 @@ class DriverStandingModel(DBBaseModel):
     position = Column(Integer, nullable=False, unique=False)
     wins = Column(Integer, nullable=False, unique=False)
 
-    race = relationship("RaceModel")
-    constructor = relationship("DriverModel")
+    races = relationship("RaceModel", back_populates="driver_standings", lazy=True)
+    drivers = relationship("DriverModel", back_populates="driver_standings", lazy=True)

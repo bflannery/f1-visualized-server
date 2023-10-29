@@ -6,7 +6,6 @@ from sqlalchemy import Column, Text
 
 class SeasonModel(DBBaseModel):
     __tablename__ = "season"
-    reference = Column(Text, nullable=False, unique=True, index=True)
     year = Column(Text, nullable=False, unique=True, index=True)
     wiki_url = Column(Text, nullable=True, unique=False)
 
