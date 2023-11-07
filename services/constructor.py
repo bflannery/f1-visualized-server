@@ -20,8 +20,8 @@ def get_constructors_by_nationality(db: Session, nationality: str) -> Constructo
     return db.query(ConstructorModel).filter(ConstructorModel.nationality == nationality).all()
 
 
-def get_all_constructors(db: Session) -> list[ConstructorModel]:
-    return db.query(ConstructorModel).all()
+def get_all_constructors(db: Session, offset: int = 0, page_count: int = 5) -> list[ConstructorModel]:
+    return db.query(ConstructorModel).offset(offset).limit(page_count + 1).all()
 
 
 ## Constructor Results
@@ -33,5 +33,5 @@ def get_constructor_results_by_constructor_id(db: Session, constructor_id: int) 
     return db.query(ConstructorResultModel).filter(ConstructorResultModel.constructor_id == constructor_id).all()
 
 
-def get_all_constructors_results(db: Session) -> list[ConstructorResultModel]:
-    return db.query(ConstructorResultModel).all()
+def get_all_constructors_results(db: Session, page: int = 0, page_count: int = 50) -> list[ConstructorResultModel]:
+    return db.query(ConstructorResultModel).offset(page).limit(page_count + 1).all()

@@ -9,4 +9,4 @@ class SeasonModel(DBBaseModel):
     year = Column(Text, nullable=False, unique=True, index=True)
     wiki_url = Column(Text, nullable=True, unique=False)
 
-    races = relationship("RaceModel", back_populates="season")
+    races = relationship("RaceModel", back_populates="season", lazy="write_only")

@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from db import get_db
-from schemas import ConstructorSchema, ConstructorResultSchema
+from schemas import ConstructorSchema
 from services import constructor as constructor_service
 
 constructors_router = APIRouter()
@@ -53,41 +53,6 @@ def get_constructor_by_name(constructor_nationality: str, db: Session = Depends(
     summary="Get all constructors",
     response_model=list[ConstructorSchema]
 )
-def get_all_constructors(db: Session = Depends(get_db)):
-    all_db_constructors = constructor_service.get_all_constructors(db)
+def get_all_constructors(offset: int = 0, page_count: int = 50, db: Session = Depends(get_db)):
+    all_db_constructors = constructor_service.get_all_constructors(db, offset=offset, page_count=page_count)
     return all_db_constructors
-
-
-@constructors_router.get(
-    "/{result_id}",
-    summary="Get constructor result by id",
-    response_model=ConstructorResultSchema
-)
-def get_constructor_by_id(result_id: int, db: Session = Depends(get_db)):
-    db_constructor_result = constructor_service.get_constructor_result_by_id(db, id=result_id)
-    if db_constructor_result is None:
-        raise HTTPException(status_code=404, detail=f"Constructor Result #{result_id} not found")
-    return db_constructor_result
-
-
-@constructors_router.get(
-    "/{constructor_id}",
-    summary="Get constructor result by constructor id",
-    response_model=list[ConstructorResultSchema]
-)
-def get_constructor_by_id(constructor_id: int, db: Session = Depends(get_db)):
-    db_constructor_results = constructor_service.get_constructor_results_by_constructor_id(db,
-                                                                                           constructor_id=constructor_id)
-    if db_constructor_results is None:
-        raise HTTPException(status_code=404, detail=f"Constructor #{constructor_id} not found")
-    return db_constructor_results
-
-
-@constructors_router.get(
-    "",
-    summary="Get all constructors results",
-    response_model=list[ConstructorResultSchema]
-)
-def get_all_constructors_results(db: Session = Depends(get_db)):
-    all_db_constructors_results = constructor_service.get_all_constructors_results(db)
-    return all_db_constructors_results
